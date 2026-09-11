@@ -11,7 +11,8 @@ WELCOME_MSG = f"""
 
 WIN_MSG = "Congratulations! You've guessed the word!"
 LOSS_MSG = "Better luck next time!"
-
+ALREADY_GUESSED_LETTER_MSG = "You've already guessed this letter!"
+WRONG_GUESS_MSG = "This letter is not in the word!"
 GOODBYE_MSG = "Goodbye!"
 
 def choose_word() -> str:
@@ -33,7 +34,10 @@ def choose_word() -> str:
 
     return chosen_word
 
+def get_user_guess_indices(user_guess: chr, word: str) -> list[int]:
+    indices = []
 
+    return indices
 
 if __name__ == "__main__":
     print(WELCOME_MSG)
@@ -44,7 +48,28 @@ if __name__ == "__main__":
         quit()
 
     word = choose_word()
-    while user_input := input() != QUIT_COMMAND:
-        pass
+    word_guess_progress = "_" * len(word)
+    guessed_letters = []
+
+    while user_input != QUIT_COMMAND:
+        print(word_guess_progress)
+
+        user_input = input()
+        if (user_input in guessed_letters):
+            print(ALREADY_GUESSED_LETTER_MSG)
+            continue
+        guess_indices.append(user_input)
+
+        guess_indices = get_user_guess_indices(user_input, word)
+        if len(guess_indices) == 0:
+            print(WRONG_GUESS_MSG)
+            continue
+
+        for idx in guess_indices:
+            word_guess_progress[idx] = user_input
+
+        if word_guess_progress == word:
+            print(WIN_MSG)
+            break
 
     print(GOODBYE_MSG)
