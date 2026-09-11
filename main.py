@@ -59,10 +59,10 @@ if __name__ == "__main__":
         print(word_guess_progress)
 
         user_input = input()
-        if (user_input in guessed_letters):
+        if user_input in guessed_letters:
             print(ALREADY_GUESSED_LETTER_MSG)
             continue
-        guess_indices.append(user_input)
+        guessed_letters.append(user_input)
 
         guess_indices = get_user_guess_indices(user_input, word)
         if len(guess_indices) == 0:
@@ -70,10 +70,12 @@ if __name__ == "__main__":
             continue
 
         for idx in guess_indices:
-            word_guess_progress[idx] = user_input
+            word_guess_progress = word_guess_progress[:idx]\
+                + user_input\
+                + word_guess_progress[idx + 1:]
 
         if word_guess_progress == word:
-            print(WIN_MSG)
+            print(WIN_MSG + " " + word + "!")
             break
 
     print(GOODBYE_MSG)
