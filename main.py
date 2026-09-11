@@ -1,5 +1,7 @@
 import random
 
+NUM_MAX_GUESSES = 10
+
 QUIT_COMMAND = "quit"
 
 WELCOME_MSG = f"""
@@ -54,11 +56,18 @@ if __name__ == "__main__":
     word = choose_word()
     word_guess_progress = "_" * len(word)
     guessed_letters = []
+    wrong_guesses = 0
 
-    while user_input != QUIT_COMMAND:
-        print(word_guess_progress)
-
+    while True:
+        print(f"{word_guess_progress} ({NUM_MAX_GUESSES - wrong_guesses} guesses left)")
         user_input = input()
+
+        # Quit game.
+        if (user_input == QUIT_COMMAND):
+            print(f"The word was {word}.")
+            break
+
+        # Process user guess.
         if user_input in guessed_letters:
             print(ALREADY_GUESSED_LETTER_MSG)
             continue
@@ -67,6 +76,12 @@ if __name__ == "__main__":
         guess_indices = get_user_guess_indices(user_input, word)
         if len(guess_indices) == 0:
             print(WRONG_GUESS_MSG)
+            wrong_guesses += 1
+
+            # Lose game.
+            if wrong_guesses >= NUM_MAX_GUESSES:
+                print(f"The word was {word}. {LOSS_MSG}")
+                break
             continue
 
         for idx in guess_indices:
@@ -74,8 +89,9 @@ if __name__ == "__main__":
                 + user_input\
                 + word_guess_progress[idx + 1:]
 
+        # Win game.
         if word_guess_progress == word:
-            print(WIN_MSG + " " + word + "!")
+            print(f"{WIN_MSG} {word}!")
             break
 
     print(GOODBYE_MSG)
