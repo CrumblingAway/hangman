@@ -37,6 +37,10 @@ def choose_word() -> str:
 def get_user_guess_indices(user_guess: chr, word: str) -> list[int]:
     indices = []
 
+    for idx, letter in enumerate(word):
+        if user_guess == letter:
+            indices.append(idx)
+
     return indices
 
 if __name__ == "__main__":
