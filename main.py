@@ -117,7 +117,8 @@ if __name__ == "__main__":
 
         # Win game.
         if word_guess_progress == word:
-            print(f"{WIN_MSG} {word}!")
+            print(word)
+            print(WIN_MSG)
             break
 
     print(GOODBYE_MSG)
