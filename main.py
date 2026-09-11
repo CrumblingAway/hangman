@@ -92,8 +92,7 @@ if __name__ == "__main__":
         elif user_input == EMPTY_COMMAND:
             print(EMPTY_INPUT_MSG)
             continue
-
-        if user_input in guessed_letters:
+        elif user_input in guessed_letters:
             print(ALREADY_GUESSED_LETTER_MSG)
             continue
 
