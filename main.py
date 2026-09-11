@@ -2,6 +2,7 @@ import random
 
 NUM_MAX_GUESSES = 10
 
+EMPTY_COMMAND = ""
 QUIT_COMMAND = "quit"
 
 WELCOME_MSG = f"""
@@ -14,6 +15,8 @@ WELCOME_MSG = f"""
 WIN_MSG = "Congratulations! You've guessed the word!"
 LOSS_MSG = "Better luck next time!"
 ALREADY_GUESSED_LETTER_MSG = "You've already guessed this letter!"
+INVALID_INPUT_MSG = "Invalid input."
+EMPTY_INPUT_MSG = "Make a guess!"
 WRONG_GUESS_MSG = "This letter is not in the word!"
 GOODBYE_MSG = "Goodbye!"
 
@@ -45,32 +48,55 @@ def get_user_guess_indices(user_guess: chr, word: str) -> list[int]:
 
     return indices
 
+def is_input_valid(user_input: str) -> bool:
+    return user_input == QUIT_COMMAND\
+           or user_input == EMPTY_COMMAND\
+           or (len(user_input) == 1 and user_input.isalpha())
+
 if __name__ == "__main__":
     print(WELCOME_MSG)
 
-    user_input = input()
-    if user_input == QUIT_COMMAND:
-        print(GOODBYE_MSG)
-        quit()
+    # Start game.
+    while True:
+        user_input = input()
+        if not is_input_valid(user_input):
+            print(INVALID_INPUT_MSG)
+            continue
+
+        if user_input == QUIT_COMMAND:
+            print(GOODBYE_MSG)
+            quit()
+        elif user_input == EMPTY_COMMAND:
+            break
 
     word = choose_word()
     word_guess_progress = "_" * len(word)
     guessed_letters = []
     wrong_guesses = 0
 
+    # Game loop.
     while True:
         print(f"{word_guess_progress} ({NUM_MAX_GUESSES - wrong_guesses} guesses left)")
         user_input = input()
 
-        # Quit game.
-        if (user_input == QUIT_COMMAND):
+        # Invalid input.
+        if not is_input_valid(user_input):
+            print(INVALID_INPUT_MSG)
+            continue
+        user_input = user_input.lower()
+
+        if user_input == QUIT_COMMAND:
             print(f"The word was {word}.")
             break
+        elif user_input == EMPTY_COMMAND:
+            print(EMPTY_INPUT_MSG)
+            continue
 
-        # Process user guess.
         if user_input in guessed_letters:
             print(ALREADY_GUESSED_LETTER_MSG)
             continue
+
+        # Process user guess.
         guessed_letters.append(user_input)
 
         guess_indices = get_user_guess_indices(user_input, word)
