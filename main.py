@@ -77,6 +77,7 @@ if __name__ == "__main__":
     # Game loop.
     while True:
         print(f"{word_guess_progress} ({NUM_MAX_GUESSES - wrong_guesses} guesses left)")
+        print(f"Guessed letters: {guessed_letters}")
         user_input = input()
 
         # Invalid input.
