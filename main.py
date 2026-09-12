@@ -2,16 +2,18 @@ import random
 
 NUM_MAX_GUESSES = 10
 
+# region Special command inputs.
 EMPTY_COMMAND = ""
 QUIT_COMMAND = "quit"
+# endregion
 
+# region Messages.
 WELCOME_MSG = f"""
 \tWelcome to Hangman!
 \tTo begin press the <ENTER> key.
 \tTo make a guess press your letter of choice and then press the <ENTER> key.
 \tTo exit at any point write \"{QUIT_COMMAND}\" and press the <ENTER> key.
 """
-
 WIN_MSG = "Congratulations! You've guessed the word!"
 LOSS_MSG = "Better luck next time!"
 ALREADY_GUESSED_LETTER_MSG = "You've already guessed this letter!"
@@ -19,6 +21,7 @@ INVALID_INPUT_MSG = "Invalid input."
 EMPTY_INPUT_MSG = "Make a guess!"
 WRONG_GUESS_MSG = "This letter is not in the word!"
 GOODBYE_MSG = "Goodbye!"
+# endregion
 
 def is_input_valid(user_input: str) -> bool:
     return user_input == QUIT_COMMAND\
@@ -28,7 +31,7 @@ def is_input_valid(user_input: str) -> bool:
 if __name__ == "__main__":
     print(WELCOME_MSG)
 
-    # Start game.
+    # region Start game.
     while True:
         user_input = input()
         if not is_input_valid(user_input):
@@ -40,6 +43,9 @@ if __name__ == "__main__":
             quit()
         elif user_input == EMPTY_COMMAND:
             break
+    # endregion
+
+    # region Choose word.
     word = None
 
     words_file = open("resources/words.txt", "r")
@@ -55,11 +61,15 @@ if __name__ == "__main__":
             break
 
     words_file.close()
+    #endregion
+
+    # region Guess setup.
     word_guess_progress = "_" * len(word)
     guessed_letters = []
     wrong_guesses = 0
+    # endregion
 
-    # Game loop.
+    # region Game loop.
     while True:
         print(f"{word_guess_progress} ({NUM_MAX_GUESSES - wrong_guesses} guesses left)")
         print(f"Guessed letters: {guessed_letters}")
@@ -109,5 +119,6 @@ if __name__ == "__main__":
             print(word)
             print(WIN_MSG)
             break
+    #endregion
 
     print(GOODBYE_MSG)
