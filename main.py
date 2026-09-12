@@ -20,34 +20,6 @@ EMPTY_INPUT_MSG = "Make a guess!"
 WRONG_GUESS_MSG = "This letter is not in the word!"
 GOODBYE_MSG = "Goodbye!"
 
-def choose_word() -> str:
-    chosen_word = None
-
-    words_file = open("resources/words.txt", "r")
-
-    num_of_words = 0
-    for _ in words_file:
-        num_of_words += 1
-    words_file.seek(0)
-    word_line_idx = random.randint(0, num_of_words - 1)
-    for idx, line in enumerate(words_file):
-        if idx == word_line_idx:
-            chosen_word = line.strip().lower()
-            break
-
-    words_file.close()
-
-    return chosen_word
-
-def get_user_guess_indices(user_guess: chr, word: str) -> list[int]:
-    indices = []
-
-    for idx, letter in enumerate(word):
-        if user_guess == letter:
-            indices.append(idx)
-
-    return indices
-
 def is_input_valid(user_input: str) -> bool:
     return user_input == QUIT_COMMAND\
            or user_input == EMPTY_COMMAND\
@@ -68,8 +40,21 @@ if __name__ == "__main__":
             quit()
         elif user_input == EMPTY_COMMAND:
             break
+    word = None
 
-    word = choose_word()
+    words_file = open("resources/words.txt", "r")
+
+    num_of_words = 0
+    for _ in words_file:
+        num_of_words += 1
+    words_file.seek(0)
+    word_line_idx = random.randint(0, num_of_words - 1)
+    for idx, line in enumerate(words_file):
+        if idx == word_line_idx:
+            word = line.strip().lower()
+            break
+
+    words_file.close()
     word_guess_progress = "_" * len(word)
     guessed_letters = []
     wrong_guesses = 0
@@ -99,7 +84,11 @@ if __name__ == "__main__":
         # Process user guess.
         guessed_letters.append(user_input)
 
-        guess_indices = get_user_guess_indices(user_input, word)
+        guess_indices = []
+        for idx, letter in enumerate(word):
+            if user_input == letter:
+                guess_indices.append(idx)
+
         if len(guess_indices) == 0:
             print(WRONG_GUESS_MSG)
             wrong_guesses += 1
